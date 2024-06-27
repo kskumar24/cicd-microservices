@@ -23,7 +23,7 @@ jobs:
         run: echo "${{ secrets.OCIR_PASSWORD }}" | docker login -u "${{ secrets.OCIR_USERNAME }}" --password-stdin <your_ocir_repo>
 
       - name: Push Docker image to OCIR
-        run: docker push <your_ocir_repo>/my-microservice:${{ github.sha }}
+        run: docker push <your_ocir_repo>/cicd-microservices:${{ github.sha }}
 
   deploy:
     needs: build
@@ -44,4 +44,4 @@ jobs:
 
       - name: Deploy to OKE
         run: |
-          kubectl set image deployment/my-deployment my-container=<your_ocir_repo>/my-microservice:${{ github.sha }}
+          kubectl set image deployment/my-deployment my-container=<your_ocir_repo>/cicd-microservices:${{ github.sha }}
