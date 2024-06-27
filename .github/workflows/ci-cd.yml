@@ -17,13 +17,13 @@ jobs:
         uses: actions/setup-docker@v1
 
       - name: Build Docker image
-        run: docker build -t <your_ocir_repo>/cicd-microservices:${{ github.sha }} .
+        run: docker build -t us-phoenix-1.ocir.io/oracleamerica/cicd-microservices:${{ github.sha }} .
 
       - name: Login to OCIR
-        run: echo "${{ secrets.OCIR_PASSWORD }}" | docker login -u "${{ secrets.OCIR_USERNAME }}" --password-stdin <your_ocir_repo>
+        run: echo "${{ secrets.OCIR_PASSWORD }}" | docker login -u "${{ secrets.OCIR_USERNAME }}" --password-stdin us-phoenix-1.ocir.io/oracleamerica/cicd-microservices
 
       - name: Push Docker image to OCIR
-        run: docker push <your_ocir_repo>/cicd-microservices:${{ github.sha }}
+        run: docker push us-phoenix-1.ocir.io/oracleamerica/cicd-microservices:${{ github.sha }}
 
   deploy:
     needs: build
@@ -44,4 +44,4 @@ jobs:
 
       - name: Deploy to OKE
         run: |
-          kubectl set image deployment/my-deployment my-container=<your_ocir_repo>/cicd-microservices:${{ github.sha }}
+          kubectl set image deployment/my-deployment my-container=us-phoenix-1.ocir.io/oracleamerica/cicd-microservices:${{ github.sha }}
