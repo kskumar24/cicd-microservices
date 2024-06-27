@@ -1,0 +1,47 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker
+        uses: actions/setup-docker@v1
+
+      - name: Build Docker image
+        run: docker build -t <your_ocir_repo>/cicd-microservices:${{ github.sha }} .
+
+      - name: Login to OCIR
+        run: echo "${{ secrets.OCIR_PASSWORD }}" | docker login -u "${{ secrets.OCIR_USERNAME }}" --password-stdin <your_ocir_repo>
+
+      - name: Push Docker image to OCIR
+        run: docker push <your_ocir_repo>/my-microservice:${{ github.sha }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up kubectl
+        uses: actions/setup-kubectl@v1
+        with:
+          version: v1.21.0
+
+      - name: Configure Kubeconfig
+        run: |
+          echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+
+      - name: Deploy to OKE
+        run: |
+          kubectl set image deployment/my-deployment my-container=<your_ocir_repo>/my-microservice:${{ github.sha }}
