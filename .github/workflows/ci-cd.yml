@@ -34,9 +34,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up kubectl
-        uses: justin0u0/setup-kubectl@v1
+        uses: azure/setup-kubectl@v3
         with:
-          version: v1.23.6
+          version: v1.29.1
 
       - name: Configure Kubeconfig
         run: |
