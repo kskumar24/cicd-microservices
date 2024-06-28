@@ -13,8 +13,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
       - name: Build Docker image
         run: docker build -t us-phoenix-1.ocir.io/oracleamerica/cicd-microservices:${{ github.sha }} .
@@ -33,17 +33,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up kubectl
-        uses: azure/setup-kubectl@v3
-        with:
-          version: '1.29.1'
+      - name: Install kubectl
+        run: |
+          curl -LO "https://dl.k8s.io/release/v1.29.1/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
 
       - name: Install OCI CLI
         run: |
           curl -L -O https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh
           chmod +x install.sh
           ./install.sh --accept-all-defaults
-          export PATH=$PATH:$HOME/bin
           echo 'export PATH=$PATH:$HOME/bin' >> $GITHUB_ENV
 
       - name: Configure OCI CLI
@@ -59,7 +59,8 @@ jobs:
         run: mkdir -p $HOME/.kube
 
       - name: Configure Kubeconfig
-        run: echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+        run: |
+          echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
 
       - name: Deploy to OKE
         run: |
