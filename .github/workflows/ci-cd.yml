@@ -45,7 +45,7 @@ jobs:
           chmod +x install.sh
           ./install.sh --accept-all-defaults
       # Ensure the PATH is updated for subsequent steps
-      - name: Update PATH
+      - name: Update PATH for OCI CLI
         run: echo 'export PATH=$PATH:$HOME/bin' >> $GITHUB_ENV
 
       - name: Configure OCI CLI
@@ -53,9 +53,6 @@ jobs:
           mkdir -p $HOME/.oci
           echo "${{ secrets.OCI_CLI_CONFIG }}" > $HOME/.oci/config
           echo "${{ secrets.OCI_CLI_KEY }}" > $HOME/.oci/oci_api_key.pem
-        env:
-          OCI_CLI_CONFIG: $HOME/.oci/config
-          OCI_CLI_KEY: $HOME/.oci/oci_api_key.pem
 
       - name: Create .kube directory
         run: mkdir -p $HOME/.kube
@@ -66,8 +63,10 @@ jobs:
       - name: Verify kubectl and OCI CLI
         run: |
           kubectl version --client
+          source $GITHUB_ENV
           oci --version
 
       - name: Deploy to OKE
         run: |
+          source $GITHUB_ENV
           kubectl set image deployment/my-deployment my-container=us-phoenix-1.ocir.io/oracleamerica/cicd-microservices:${{ github.sha }}
