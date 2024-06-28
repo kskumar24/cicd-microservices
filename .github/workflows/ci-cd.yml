@@ -47,5 +47,4 @@ jobs:
 
       - name: Deploy to OKE
         run: |
-          kubectl apply -f k8s/deployment.yaml
           kubectl set image deployment/my-deployment my-container=us-phoenix-1.ocir.io/oracleamerica/kubectl:${{ github.sha }}
