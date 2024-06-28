@@ -38,6 +38,23 @@ jobs:
         with:
           version: v1.29.1
 
+      - name: Install OCI CLI
+        run: |
+          curl -L -O https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh
+          chmod +x install.sh
+          ./install.sh --accept-all-defaults
+        env:
+          OCI_CLI_VERSION: latest
+
+      - name: Configure OCI CLI
+        run: |
+          mkdir -p $HOME/.oci
+          echo "${{ secrets.OCI_CLI_CONFIG }}" > $HOME/.oci/config
+          echo "${{ secrets.OCI_CLI_KEY }}" > $HOME/.oci/oci_api_key.pem
+        env:
+          OCI_CLI_CONFIG: $HOME/.oci/config
+          OCI_CLI_KEY: $HOME/.oci/oci_api_key.pem
+
       - name: Create .kube directory
         run: mkdir -p $HOME/.kube
 
