@@ -33,40 +33,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install kubectl
-        run: |
-          curl -LO "https://dl.k8s.io/release/v1.29.1/bin/linux/amd64/kubectl"
-          chmod +x kubectl
-          sudo mv kubectl /usr/local/bin/
-
-      - name: Install OCI CLI
-        run: |
-          curl -L -O https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh
-          chmod +x install.sh
-          ./install.sh --accept-all-defaults
-      # Ensure the PATH is updated for subsequent steps
-      - name: Update PATH for OCI CLI
-        run: echo 'export PATH=$PATH:$HOME/bin' >> $GITHUB_ENV
-
-      - name: Configure OCI CLI
-        run: |
-          mkdir -p $HOME/.oci
-          echo "${{ secrets.OCI_CLI_CONFIG }}" > $HOME/.oci/config
-          echo "${{ secrets.OCI_CLI_KEY }}" > $HOME/.oci/oci_api_key.pem
-
-      - name: Create .kube directory
-        run: mkdir -p $HOME/.kube
+      - name: Set up kubectl
+        uses: actions/setup-kubectl@v1
+        with:
+          version: v1.29.1
 
       - name: Configure Kubeconfig
-        run: echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
-
-      - name: Verify kubectl and OCI CLI
         run: |
-          kubectl version --client
-          source $GITHUB_ENV
-          oci --version
+          echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
 
       - name: Deploy to OKE
         run: |
-          source $GITHUB_ENV
+          kubectl apply -f k8s/deployment.yaml
           kubectl set image deployment/my-deployment my-container=us-phoenix-1.ocir.io/oracleamerica/cicd-microservices:${{ github.sha }}
