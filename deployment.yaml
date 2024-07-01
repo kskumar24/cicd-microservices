@@ -2,10 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: my-app
-  labels:
-    app: my-app
+  namespace: default  # or any other namespace you are using
 spec:
-  replicas: 3
+  replicas: 3  # adjust the number of replicas as needed
   selector:
     matchLabels:
       app: my-app
@@ -15,20 +14,22 @@ spec:
         app: my-app
     spec:
       containers:
-      - name: my-app
-        image: my-docker-repo/my-app:latest
+      - name: my-container
+        image: us-phoenix-1.ocir.io/oracleamerica/cicd-microservices:${GITHUB_SHA}  # replace with your actual image path
         ports:
-        - containerPort: 80
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: my-app-service
-spec:
-  selector:
-    app: my-app
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-  type: LoadBalancer
+        - containerPort: 8080
+        env:
+        - name: NODE_ENV
+          value: "production"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 20
