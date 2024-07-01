@@ -46,7 +46,9 @@ jobs:
           echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
 
       - name: Deploy to Kubernetes
-        run: kubectl apply -f k8s/deployment.yaml
-             kubectl set image deployment/my-deployment my-container=us-phoenix-1.ocir.io/oracleamerica/kubectl:${{ github.sha }}
+        run: |
+          kubectl apply -f k8s/deployment.yaml
+          kubectl set image deployment/my-app my-container=us-phoenix-1.ocir.io/oracleamerica/kubectl:${{ github.sha }}
         env:
           KUBECONFIG: ${{ secrets.KUBECONFIG }}
+
