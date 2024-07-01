@@ -1,0 +1,6 @@
+[DEFAULT]
+user=ocid1.user.oc1..aaaaaaaaad75yj2wtterxi3esg3e6dtybq7ffj4l356krmg3qmwdjpbgwlga
+fingerprint=f3:90:1f:94:e0:56:bd:52:cc:93:f3:32:cd:19:75:96
+key_file=/home/k_santhosh/.ssh/id_rsa
+tenancy=ocid1.tenancy.oc1..aaaaaaaaxpn5dvq54mwvlg5vujffeveziuwhovn5dq4ouqicbpzewxcmdbba
+region=us-phoenix-1
