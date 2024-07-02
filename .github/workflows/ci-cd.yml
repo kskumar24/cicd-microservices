@@ -39,10 +39,10 @@ jobs:
           version: v1.29.1
 
       - name: Install OCI CLI
-      run: |
-        curl -L https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh | bash -s -- --accept-all-defaults
-        echo 'export PATH=$HOME/bin:$PATH' >> $GITHUB_ENV
-      shell: bash
+        run: |
+          curl -L https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh | bash -s -- --accept-all-defaults
+          echo 'export PATH=$HOME/bin:$PATH' >> $GITHUB_ENV
+          shell: bash
 
       - name: Set up kubeconfig
         env:
