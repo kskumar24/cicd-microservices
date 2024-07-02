@@ -60,7 +60,6 @@ jobs:
       - name: Deploy to Kubernetes
         run: 
           kubectl set image deployment/coredns coredns=us-phoenix-1.ocir.io/oracleamerica/kubectl:${{ github.sha }}
-          kubectl set image deployment/kube-dns-autoscaler autoscaler=us-phoenix-1.ocir.io/oracleamerica/kubectl:${{ github.sha }}
         env:
            KUBECONFIG_BASE64: ${{ secrets.KUBECONFIG_BASE64 }}
            OCI_CLI_AUTH: ${{ secrets.OCI_CLI_AUTH }}
