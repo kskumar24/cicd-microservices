@@ -59,7 +59,7 @@ jobs:
 
       - name: Deploy to Kubernetes
         run: 
-          kubectl set image deployment/coredns coredns=us-phoenix-1.ocir.io/oracleamerica/kubectl:${{ github.sha }}
+          kubectl set image deployment/coredns coredns=us-phoenix-1.ocir.io/oracleamerica/kubectl:${{ github.sha }} -n kube-system
         env:
            KUBECONFIG_BASE64: ${{ secrets.KUBECONFIG_BASE64 }}
            OCI_CLI_AUTH: ${{ secrets.OCI_CLI_AUTH }}
