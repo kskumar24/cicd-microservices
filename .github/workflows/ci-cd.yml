@@ -57,10 +57,6 @@ jobs:
           chmod 600 $HOME/.oci/oci_api_key.pem
         shell: bash
 
-      - name: Verify Kubernetes Configuration
-        run: kubectl get nodes
-        shell: bash
-
       - name: Deploy to Kubernetes
         run: 
           kubectl set image deployment/my-app my-container=us-phoenix-1.ocir.io/oracleamerica/kubectl:${{ github.sha }}
