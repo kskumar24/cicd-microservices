@@ -39,18 +39,18 @@ jobs:
           version: v1.29.1
 
       - name: Install OCI CLI
-      run: |
+        run: |
         curl -L https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh | bash
         echo "export PATH=$HOME/bin:$PATH" >> $GITHUB_ENV
 
-    - name: Configure OCI CLI
-      env:
+      - name: Configure OCI CLI
+        env:
         OCI_CLI_AUTH: ${{ secrets.OCI_CLI_AUTH }}
         OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }}
         OCI_CLI_TENANCY: ${{ secrets.OCI_CLI_TENANCY }}
         OCI_CLI_REGION: ${{ secrets.OCI_CLI_REGION }}
         OCI_CLI_KEY_FILE: ${{ secrets.OCI_CLI_KEY_FILE }}
-      run: |
+        run: |
         mkdir -p ~/.oci
         echo "[DEFAULT]" > ~/.oci/y
         echo "user=${OCI_CLI_USER}" >> ~/.oci/y
