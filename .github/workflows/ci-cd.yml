@@ -49,8 +49,7 @@ jobs:
 
 
       - name: Deploy to Kubernetes
-        run: |
-          kubectl apply -f deployment.yaml
+        run: 
           kubectl set image deployment/my-app my-container=us-phoenix-1.ocir.io/oracleamerica/kubectl:${{ github.sha }}
         env:
           KUBECONFIG_BASE64: ${{ secrets.KUBECONFIG_BASE64 }}
