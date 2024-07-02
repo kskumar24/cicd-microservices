@@ -49,7 +49,7 @@ jobs:
           KUBECONFIG_BASE64: ${{ secrets.KUBECONFIG_BASE64 }}
         run: |
           mkdir -p $HOME/.kube
-          echo "$KUBECONFIG_BASE64" | $HOME/.kube/config
+          echo "$KUBECONFIG_BASE64" | base64 --decode > $HOME/.kube/config
           chmod 600 $HOME/.kube/config
           mkdir -p $HOME/.oci
           echo "${{ secrets.OCI_CLI_CONFIG }}" > $HOME/.oci/y
